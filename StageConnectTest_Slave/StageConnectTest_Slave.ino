@@ -98,20 +98,34 @@ U8 slave_rx_buf[255];
  // construct the object
 Csc_slave  sc_slave = Csc_slave(&slv_node_def, 1, 0xd0); 
 
+void I2C_RxHandler(int numBytes) {
+  while(Wire.available()) {  // Read Any Received Data
+    sc_slave.set_reg_add(Wire.read());
+  }
+  
+}
+
+void I2C_TxHandler(void)
+{
+  Wire.write(sc_slave.read_reg());
+}
 
 void setup() {
 
   //i2c default pins ->  (SCL=GPIO5 ; SDA =GPIO4).
-  Wire.begin(); 
+  //Wire.begin(); 
+  
   Serial.begin(115200);
   
   while (1) {
   
   Serial.println("Apply Reset");
   A2B_DEBUG_A2B("test message");
-  sc_slave.reset();
+  //sc_slave.reset();
 
-
+  Wire.begin(0x3d); //7a or 3d
+  Wire.onReceive(I2C_RxHandler);
+  Wire.onRequest(I2C_TxHandler);
   S8 link_status = A2B_NODE_NOT_LINKED_ERROR;
   S8 prev_link_status = A2B_NODE_NOT_LINKED_ERROR;
 
