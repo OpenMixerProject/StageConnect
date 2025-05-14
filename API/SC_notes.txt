@@ -1,0 +1,74 @@
+## Notes on the StageCONNECT API and stand alone module
+## S. Grey    Marz 2018
+#################################################
+
+##
+#api_ver : api version
+refers to the version of the StageCONNECT implementation
+
+##
+#brand id
+- 0x00  -> Behringer
+- 0x01  -> Midas
+- 0x02	-> Turbo Sound
+- 0x03	-> KT
+- 0x04	-> Bugera
+- 0x05	-> TC Electronics
+- 0x06	-> TC Helicon
+- 0x07	-> Lab groupen
+- 0x08	-> Tannoy
+
+##
+#product_id : 2 bytes long
+NOTE: bit 15 or product_id[1] bit 7 is 1 for SC moudle
+- 0x0000  	-> 
+
+##
+#serial interface commands and protocol
+Start of Frame  = > *
+End of Frame  = > #
+
+Write register command
+*W<address><value>#
+
+Read register command
+*R<address><value>#
+
+Save node register
+*A#
+
+Reset node   key= '~'
+*B<key>#
+
+Send message to master : slave only  max 99 bytes
+*C<length><byte0><byte1><byte2>#
+
+Send message to slave : master only  max 99 bytes
+*D<length><byte0><byte1><byte2>#
+
+request/start a new discovery round
+*E#
+
+
+## product id Behringer
+00 - 00 01  = WING
+00 - 00 02  = P24 HUB
+
+## product id MIDAS
+01 - 00 01  = HUB4
+
+## product id KT
+03 - 00 01 = DN4816-O
+03 - 00 02 = DN4816-I
+03 - 00 03 = DN4888
+03 - 00 04 = DN4816U
+
+
+
+
+
+## I2C addresses
+00 - 0xd0
+01 - 0xd4
+10 - 0xd8
+11 - 0xdc
