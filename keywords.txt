@@ -1,0 +1,25 @@
+#######################################
+# Syntax Coloring Map For StageConnect
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+StageConnect 	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+bus			KEYWORD2
+master			KEYWORD2
+slave			KEYWORD2
+config			KEYWORD2
+getChipInfo		KEYWORD2
+update 			KEYWORD2
+getLinkStatus 		KEYWORD2
+sendMessageToMaster 	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+

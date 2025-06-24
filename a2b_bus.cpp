@@ -3,7 +3,7 @@
 #include "AD2425_inc.h"
 
 
-Ca2b_bus_242x::Ca2b_bus_242x(U8 a2b_id, U8 I2C_address, Ci2c_com* com_int)
+Ca2b_bus_242x::Ca2b_bus_242x(uint8_t a2b_id, uint8_t I2C_address, Ci2c_com* com_int)
 {
   //NOTE: I2C interface expects address right justified.
   I2C_master = I2C_address >> 1;
@@ -36,7 +36,7 @@ void Ca2b_bus_242x::reset_bus(void)
   com_int_->i2c_write(I2C_master, AD242X_SWCTL_REG,  0);  
 
   for(int node_id=0; node_id < A2B_MAX_NO_NODES; node_id++)
-    memset((U8*)&nodes[node_id],0,sizeof(Snode));
+    memset((uint8_t*)&nodes[node_id],0,sizeof(Snode));
 }
 
 int Ca2b_bus_242x::is_master_running(void)
@@ -97,12 +97,12 @@ void Ca2b_bus_242x::set_as_master(void)
 
 
 
-U8 Ca2b_bus_242x::irq_event(U8* event_id)
+uint8_t Ca2b_bus_242x::irq_event(uint8_t* event_id)
 {
   //0 = no interrupt
   //1 => master
   //>=16 => slave id plus 16!!
-  U8 source = 0;
+  uint8_t source = 0;
 
   //read IRQ bit
   com_int_->i2c_read(I2C_master, AD242X_INTSTAT_REG , &temp_byte);
@@ -129,7 +129,7 @@ U8 Ca2b_bus_242x::irq_event(U8* event_id)
 
 int Ca2b_bus_242x::discover_1st_node(bool start)
 {
-  U8 node_id = 0;
+  uint8_t node_id = 0;
 
   if(start){
     //NOTE: no switch functionality on this function, no phantom power
@@ -197,9 +197,9 @@ int Ca2b_bus_242x::discover_1st_node(bool start)
 }//end function
 
 
-int Ca2b_bus_242x::discover_more_nodes(U8 node_id, bool start)
+int Ca2b_bus_242x::discover_more_nodes(uint8_t node_id, bool start)
 {
-  U8 node_pre = node_id - 1;
+  uint8_t node_pre = node_id - 1;
 
   if(start){
     //NOTE: no switch functionality on this function, no phantom power
@@ -282,7 +282,7 @@ int Ca2b_bus_242x::discover_more_nodes(U8 node_id, bool start)
 }//end function
 
 
-int Ca2b_bus_242x::configure_node_downstream(U8 node_id)
+int Ca2b_bus_242x::configure_node_downstream(uint8_t node_id)
 {
   //if reg is not used, give parameter as zero
   //NOTE SG: broadcast is not used, the mask and other registers are more flexible
@@ -323,12 +323,12 @@ int Ca2b_bus_242x::configure_node_downstream(U8 node_id)
   //new structure bit setting needed
   new_structure = true;
 
-  A2B_DEBUG_A2B("DBG_A2B: ID%d node_id = %d ,downslotsbypass=%d, downslots_local=%d downslots_msk=%08x \n",chain_id_ ,node_id, nodes[node_id].downslotsbypass, nodes[node_id].downslots_local, *(U32*)&nodes[node_id].downslots_msk )
+  A2B_DEBUG_A2B("DBG_A2B: ID%d node_id = %d ,downslotsbypass=%d, downslots_local=%d downslots_msk=%08x \n",chain_id_ ,node_id, nodes[node_id].downslotsbypass, nodes[node_id].downslots_local, *(uint32_t*)&nodes[node_id].downslots_msk )
   return A2B_NO_ERROR;
 }//end function
 
 
-int Ca2b_bus_242x::configure_node_upstream(U8 node_id)
+int Ca2b_bus_242x::configure_node_upstream(uint8_t node_id)
 {
   int status = check_node_id(node_id);
   if (status)
@@ -361,7 +361,7 @@ int Ca2b_bus_242x::configure_node_upstream(U8 node_id)
   new_structure = true;
 
 
-  A2B_DEBUG_A2B("DBG_A2B: ID%d node_id = %d ,upslotsbypass=%d, upslots_local=%d upslots_msk=%08x \n",chain_id_ , node_id, nodes[node_id].upslotsbypass, nodes[node_id].upslots_local, *(U32*)&nodes[node_id].upslots_msk )
+  A2B_DEBUG_A2B("DBG_A2B: ID%d node_id = %d ,upslotsbypass=%d, upslots_local=%d upslots_msk=%08x \n",chain_id_ , node_id, nodes[node_id].upslotsbypass, nodes[node_id].upslots_local, *(uint32_t*)&nodes[node_id].upslots_msk )
 
 
   return A2B_NO_ERROR;
@@ -385,9 +385,9 @@ int Ca2b_bus_242x::configure_master_slots(void)
 }//end function
 
 //int Ca2b_bus_242x::configure_master_i2c(void);
-//int Ca2b_bus_242x::configure_node_i2c((U8 node_id);
+//int Ca2b_bus_242x::configure_node_i2c((uint8_t node_id);
 
-int Ca2b_bus_242x::configure_master_i2s(U8 config)
+int Ca2b_bus_242x::configure_master_i2s(uint8_t config)
 {
 
   com_int_->i2c_write(I2C_master, AD242X_I2SGCFG_REG, config); //AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM8
@@ -404,7 +404,7 @@ int Ca2b_bus_242x::configure_master_i2s(U8 config)
 }//end function
 
 
-int Ca2b_bus_242x::configure_node_i2s(U8 node_id, U8 config, bool loopback)
+int Ca2b_bus_242x::configure_node_i2s(uint8_t node_id, uint8_t config, bool loopback)
 {
   int status = check_node_id(node_id);
   if (status)
@@ -433,26 +433,26 @@ int Ca2b_bus_242x::configure_node_i2s(U8 node_id, U8 config, bool loopback)
 
 
 
-U8 Ca2b_bus_242x::get_version(void)
+uint8_t Ca2b_bus_242x::get_version(void)
 {
-  U8 temp_byte = 0;
+  uint8_t temp_byte = 0;
   com_int_->i2c_read(I2C_master, AD242X_VERSION_REG, &temp_byte);
 
   return temp_byte;
 
 }//end function
 
-U8 Ca2b_bus_242x::get_product_id(void)
+uint8_t Ca2b_bus_242x::get_product_id(void)
 {
-  U8 temp_byte = 0;
+  uint8_t temp_byte = 0;
   com_int_->i2c_read(I2C_master, AD242X_PRODUCT_REG, &temp_byte);
 
   return temp_byte;
 }//end function
 
-U8 Ca2b_bus_242x::get_vendor_id(void)
+uint8_t Ca2b_bus_242x::get_vendor_id(void)
 {
-  U8 temp_byte = 0;
+  uint8_t temp_byte = 0;
   com_int_->i2c_read(I2C_master, AD242X_VENDOR_REG, &temp_byte);
 
   return temp_byte;
@@ -467,7 +467,7 @@ void Ca2b_bus_242x::set_newstruct_master(void)
 }//end function
 
 
-int Ca2b_bus_242x::node_linked(U8 node_id, bool clear)
+int Ca2b_bus_242x::node_linked(uint8_t node_id, bool clear)
 {
   if (node_id >= A2B_MAX_NO_NODES)
     return A2B_MAX_NODE_ERROR;
@@ -483,7 +483,7 @@ int Ca2b_bus_242x::node_linked(U8 node_id, bool clear)
 
 
 
-int Ca2b_bus_242x::node_i2c_write(U8 node_id, U8 rmt_i2c_add, U8 reg, U8* data, U8 length)
+int Ca2b_bus_242x::node_i2c_write(uint8_t node_id, uint8_t rmt_i2c_add, uint8_t reg, uint8_t* data, uint8_t length)
 {
   int status = check_node_id(node_id);
   if (status)
@@ -516,7 +516,7 @@ int Ca2b_bus_242x::node_i2c_write(U8 node_id, U8 rmt_i2c_add, U8 reg, U8* data, 
 
 
 
-int Ca2b_bus_242x::node_i2c_read(U8 node_id, U8 rmt_i2c_add, U8 reg, U8* data, U8 length)
+int Ca2b_bus_242x::node_i2c_read(uint8_t node_id, uint8_t rmt_i2c_add, uint8_t reg, uint8_t* data, uint8_t length)
 {
   int status = check_node_id(node_id);
   if (status)
@@ -553,8 +553,8 @@ int Ca2b_bus_242x::node_i2c_read(U8 node_id, U8 rmt_i2c_add, U8 reg, U8* data, U
 //return true when a restart discovery round is necesary
 int Ca2b_bus_242x::calc_respnd_cycles(void)
 {
-  U32 max;
-  U32 min;
+  uint32_t max;
+  uint32_t min;
 
   min = (downstream_slots_ * (A2B_DEF_BIT_RES+1) + 64) / 4 + 1 + 4 * (no_nodes_ - 1);  //+1 -> parity; 64 synch header and control
   max = 248 - (upstream_slots_ * (A2B_DEF_BIT_RES+1) + 64) / 4;
@@ -576,7 +576,7 @@ int Ca2b_bus_242x::calc_respnd_cycles(void)
 
 }//end function
 
-int Ca2b_bus_242x::check_node_id(U8 node_id)
+int Ca2b_bus_242x::check_node_id(uint8_t node_id)
 {
   if (node_id >= A2B_MAX_NO_NODES)
     return A2B_MAX_NODE_ERROR;
@@ -595,6 +595,10 @@ void Ca2b_bus_242x::reset_comint(void)
 {
   com_int_->reset();
 }
+
+//void Ca2b_bus_242x::configure_com_buffers(uint8_t* tx_buf_p, uint8_t* rx_buf_p, uint8_t size) {
+//  empty function. Will be overwritten from slave
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////  Private

@@ -1,8 +1,5 @@
 #pragma once
 
-#include "types.h"
-
-
 //Include file for the register mapping of A2B 2425 traceivers
 
 

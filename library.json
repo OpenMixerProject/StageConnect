@@ -1,0 +1,29 @@
+{
+  "name": "StageConnect",
+  "keywords": "stageconnect, a2b, audio, multichannel",
+  "description": "Arduino Library for Behringers StageConnect (A2B)",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/xn--nding-jua/StageConnect.git"
+  },
+  "authors": 
+  [
+    {
+      "name": "Chris Noeding",
+      "email": "christian@noeding-online.de",
+      "url": "https://chrisdevblog.com",
+      "maintainer": true
+    },
+    {
+      "name": "YetAnotherElectronicsChannel",
+      "email": "yetanotherelectronicschannel@gmail.com",
+      "url": "https://github.com/YetAnotherElectronicsChannel",
+      "maintainer": true
+    }
+  ],
+  "version": "1.0.0",
+  "license": "GPL",
+  "frameworks": "arduino",
+  "platforms": "*"
+}

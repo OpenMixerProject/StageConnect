@@ -17,9 +17,9 @@ enum {
 };
 
 
-Csc_master::Csc_master(A2B_Ssc_node* def, U8 local_id, U8 I2C_address, Ci2c_com* com_int): Ca2b_bus_242x(local_id, I2C_address, com_int)
+Csc_master::Csc_master(A2B_Ssc_node* def, uint8_t local_id, uint8_t I2C_address, Ci2c_com* com_int): Ca2b_bus_242x(local_id, I2C_address, com_int)
 {
-  //memcpy((U8*)&l_node_def, (U8*)def, sizeof(A2B_Ssc_node));
+  //memcpy((uint8_t*)&l_node_def, (uint8_t*)def, sizeof(A2B_Ssc_node));
   l_node_def = def;
   fw_buf_=0;
   fw_size_=0;
@@ -93,7 +93,7 @@ int Csc_master::start_discovery_rnd(void)
 {
   int status;
   int stat_return = 0;
-  static U8 cnt = 3;
+  static uint8_t cnt = 3;
 
   switch (dis_status_) {
     case dis_idle:
@@ -196,7 +196,7 @@ int Csc_master::start_discovery_rnd(void)
 
 int Csc_master::check_link(void)
 {
-  U8 control = l_node_def->control;
+  uint8_t control = l_node_def->control;
   int ret = A2B_NODE_NOT_LINKED_ERROR;
 
   //clear flags
@@ -217,9 +217,9 @@ int Csc_master::check_link(void)
 
 }//end method
 
-int Csc_master::check_link_node(U8 node_id)
+int Csc_master::check_link_node(uint8_t node_id)
 {
-  U8 control;
+  uint8_t control;
   int ret = A2B_NODE_NOT_LINKED_ERROR;
 
   if (node_id >= no_nodes_)
@@ -251,7 +251,7 @@ int Csc_master::check_link_node(U8 node_id)
 int Csc_master::configure_chain(void)
 {
   int status;
-  U8 node_idx;
+  uint8_t node_idx;
 
   //check links
   for (node_idx = 0; node_idx < no_nodes_; node_idx++) {
@@ -314,7 +314,7 @@ int Csc_master::configure_master(void)
 int Csc_master::check_chain_power(void)
 {
   int link;
-  U8 node_id;
+  uint8_t node_id;
 
   chain_pwr_ = 0;
 
@@ -356,9 +356,9 @@ int Csc_master::check_chain_power(void)
  *  \return >0 number of bytes send  or error code
  *
  */
-int Csc_master::send_message(U8 node_id, U8* data, U8 length)
+int Csc_master::send_message(uint8_t node_id, uint8_t* data, uint8_t length)
 {
-  U8 temp;
+  uint8_t temp;
 
   if (node_id >= no_nodes_)
     return A2B_NODE_ID_INVALID;
@@ -392,9 +392,9 @@ int Csc_master::send_message(U8 node_id, U8* data, U8 length)
  *  \return >=0 number of byte received. or error code
  *
  */
-int Csc_master::get_message(U8 node_id, U8* target, U8 max_len)
+int Csc_master::get_message(uint8_t node_id, uint8_t* target, uint8_t max_len)
 {
-  U8 no_bytes = 0;
+  uint8_t no_bytes = 0;
 
   if (node_id >= no_nodes_)
     return A2B_NODE_ID_INVALID;
@@ -431,9 +431,9 @@ int Csc_master::send_link_stat(void)
 {
   //NOTE: flag need to be set regularly by master
   int link;
-  U8 node_id;
-  U8 power = 0;
-  U8 samp_rate = 0;
+  uint8_t node_id;
+  uint8_t power = 0;
+  uint8_t samp_rate = 0;
 
   for (node_id = 0; node_id < no_nodes_; node_id++){
     //check links
@@ -463,8 +463,8 @@ int Csc_master::check_nodes_stat(void)
 {
   
   int link;
-  U8 node_id;
-  U8 status_l;
+  uint8_t node_id;
+  uint8_t status_l;
 
   for (node_id = 0; node_id < no_nodes_; node_id++){
     //check links
@@ -502,7 +502,7 @@ int Csc_master::check_nodes_stat(void)
 }//end method
 
 
-int Csc_master::change_node_audio_def(U8 node_id, U8 downslots4node, U8 upslots_local)
+int Csc_master::change_node_audio_def(uint8_t node_id, uint8_t downslots4node, uint8_t upslots_local)
 {
   //NOTE: flag need to be set regularly by master
   int status;
@@ -531,12 +531,12 @@ bool Csc_master::get_ch_alloc_flag(void)
   return temp;
 }
 
-U8 Csc_master::get_ch_alloc(U32 *lut)
+uint8_t Csc_master::get_ch_alloc(uint32_t *lut)
 {
-  U8 ch_cnt = 0;
-  U8 node_idx;
-  U8 ch_idx;
-  U32 *lut_p = lut;
+  uint8_t ch_cnt = 0;
+  uint8_t node_idx;
+  uint8_t ch_idx;
+  uint32_t *lut_p = lut;
   //A2B_DEBUG_SC("DBG_SC:  call upstream_slots_=%d \n", upstream_slots_);
 
   for (node_idx = 0; node_idx < no_nodes_; node_idx++){
@@ -559,9 +559,9 @@ void Csc_master::event_handler()
   //0 = no interrupt
   //1 => master
   //>=16 => slave id plus 16!!
-  U8 source;
-  U8 source_node;
-  U8 int_type;
+  uint8_t source;
+  uint8_t source_node;
+  uint8_t int_type;
 
   if (!chain_runnig_)
     return;
@@ -682,16 +682,16 @@ void Csc_master::event_handler()
 
 }//end function
 
-void Csc_master::conf_fw_update(U8* fw_p, U32 fw_len)
+void Csc_master::conf_fw_update(uint8_t* fw_p, uint32_t fw_len)
 {
   fw_buf_ = fw_p;
   fw_size_ = fw_len;
 }
 
-void Csc_master::myxtoa_byte(U8 *str, U8 var)
+void Csc_master::myxtoa_byte(uint8_t *str, uint8_t var)
 {
   int pos = 0;
-  //U8 byte = var;
+  //uint8_t byte = var;
 
   for (pos = 1; pos >= 0; pos--, var = (var >> 4)) {
     if ((var & 0xf) <= 0x9) str[pos] = '0' + (var & 0xf);
@@ -702,7 +702,7 @@ void Csc_master::myxtoa_byte(U8 *str, U8 var)
 
 void Csc_master::update_allnodes(void)
 {
-  U8 node_id;
+  uint8_t node_id;
   
   for(node_id = 0; node_id < no_nodes_; node_id++)
     update_node(node_id);
@@ -710,16 +710,16 @@ void Csc_master::update_allnodes(void)
 
 
 
-int Csc_master::update_node(U8 node_id)
+int Csc_master::update_node(uint8_t node_id)
 {
-  static U8* l_fw = fw_buf_;
-  U32 byte_cnt = 0;
-  U8 frame_size = 64;
+  static uint8_t* l_fw = fw_buf_;
+  uint32_t byte_cnt = 0;
+  uint8_t frame_size = 64;
   int status;
-  U8 cmd;
-  U8 temp;
-  U8 key = '~';
-  U32 length = fw_size_;
+  uint8_t cmd;
+  uint8_t temp;
+  uint8_t key = '~';
+  uint32_t length = fw_size_;
 
   l_fw = fw_buf_;
 
@@ -789,13 +789,13 @@ int Csc_master::update_node(U8 node_id)
 
 ///////////////////////////////////////////////////////////////////////////////////
 //  private
-U8 Csc_master::get_reg_add(U8* offset)
+uint8_t Csc_master::get_reg_add(uint8_t* offset)
 {
-  return (U8)(offset - &l_node_def->api_ver);
+  return (uint8_t)(offset - &l_node_def->api_ver);
 }//end method
 
 
-int Csc_master::get_node_def_int(A2B_Ssc_node* def, U8 node_id)
+int Csc_master::get_node_def_int(A2B_Ssc_node* def, uint8_t node_id)
 {
 
 #ifdef A2B_UPDATE_NODE
@@ -805,7 +805,7 @@ int Csc_master::get_node_def_int(A2B_Ssc_node* def, U8 node_id)
   A2B_WAIT_FUNCTION(1000);
 #endif
 
-  return node_i2c_read(node_id, A2B_DEF_I2C_ADD, 0, (U8*)def, sizeof(A2B_Ssc_node) - 4); //the buffer pointers and status should not be read
+  return node_i2c_read(node_id, A2B_DEF_I2C_ADD, 0, (uint8_t*)def, sizeof(A2B_Ssc_node) - 4); //the buffer pointers and status should not be read
 
 }//end method
 
@@ -814,13 +814,13 @@ void Csc_master::balance_streams(void)
 {
   //NOTE: current version does not support local audio slot to go downstream
 
-  U8 bc_total_down=0;
-  U8 node_idx;
-  U8 total_down = 0;
-  U32 mask = 0;
-  U8* mask_p = (U8*)&mask;
-  S8 total_up = 0;
-  U8 up_max = l_node_def->upslots_local;
+  uint8_t bc_total_down=0;
+  uint8_t node_idx;
+  uint8_t total_down = 0;
+  uint32_t mask = 0;
+  uint8_t* mask_p = (uint8_t*)&mask;
+  int8_t total_up = 0;
+  uint8_t up_max = l_node_def->upslots_local;
 
   downstream_slots_ = 0;
   upstream_slots_ = 0;
@@ -938,11 +938,11 @@ void Csc_master::balance_downstream(void)
 {
   //NOTE: current version does not support local audio slot to go downstream
 
-  U8 bc_total_down=0;
-  U8 node_idx;
-  U8 total_down = 0;
-  U32 mask = 0;
-  U8* mask_p = (U8*)&mask;
+  uint8_t bc_total_down=0;
+  uint8_t node_idx;
+  uint8_t total_down = 0;
+  uint32_t mask = 0;
+  uint8_t* mask_p = (uint8_t*)&mask;
 
   // the master downstream value need to be calculated according to the total downstream
   // slots coming from all node
@@ -1005,11 +1005,11 @@ void Csc_master::balance_downstream(void)
 
 void Csc_master::balance_upstream(void)
 {
-  S8 node_idx;
-  S8 total_up = 0;
-  U32 mask = 0;
-  U8* mask_p = (U8*)&mask;
-  U8 up_max = l_node_def->upslots_local;
+  int8_t node_idx;
+  int8_t total_up = 0;
+  uint32_t mask = 0;
+  uint8_t* mask_p = (uint8_t*)&mask;
+  uint8_t up_max = l_node_def->upslots_local;
 
   if ((downstream_slots_ + up_max) > 32)
     up_max = 32 - downstream_slots_;     //base class variable
@@ -1058,9 +1058,9 @@ void Csc_master::balance_upstream(void)
 void Csc_master::clear_streams(void)
 {
   //NOTE: current version does not support local audio slot to go downstream
-  U8 node_idx;
-  U32 mask = 0;
-  U8* mask_p = (U8*)&mask;
+  uint8_t node_idx;
+  uint32_t mask = 0;
+  uint8_t* mask_p = (uint8_t*)&mask;
   int status;
 
     //clear downstream
@@ -1089,9 +1089,9 @@ void Csc_master::clear_streams(void)
 
 }//end method
 
-U32 Csc_master::calc_mask(U8 no_slots)
+uint32_t Csc_master::calc_mask(uint8_t no_slots)
 {
-  U32 mask = 0;
+  uint32_t mask = 0;
 
   if (no_slots > 32)
     return mask;
@@ -1111,7 +1111,7 @@ int Csc_master::get_num_active_nodes()
 }
 
 
-bool Csc_master::get_node_def(A2B_Ssc_node* def, U8 node_id)
+bool Csc_master::get_node_def(A2B_Ssc_node* def, uint8_t node_id)
 {
   if (node_id < 0 || node_id >= no_nodes_) return false;
   *def = sc_nodes_def[node_id]; // this is a structure copy

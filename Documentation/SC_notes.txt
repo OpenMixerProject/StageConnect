@@ -20,7 +20,7 @@ refers to the version of the StageCONNECT implementation
 
 ##
 #product_id : 2 bytes long
-NOTE: bit 15 or product_id[1] bit 7 is 1 for SC moudle
+NOTE: bit 15 or product_id[1] bit 7 is 1 for SC module
 - 0x0000  	-> 
 
 ##

@@ -2,15 +2,12 @@
 #include "a2b_bus.h"
 #include "AD2425_inc.h"
 #include "stcon.h"
-#include "io.h"
-#include "utils.h"
 
 
-
-Csc_slave::Csc_slave(A2B_Ssc_node* def, U8 local_id, U8 I2C_address, Ci2c_com* com_int): Ca2b_bus_242x(local_id, I2C_address, com_int)
+Csc_slave::Csc_slave(A2B_Ssc_node* def, uint8_t local_id, uint8_t I2C_address, Ci2c_com* com_int): Ca2b_bus_242x(local_id, I2C_address, com_int)
 {
 	l_node_def = def;
-	l_node_def_byte = (U8*)l_node_def;
+	l_node_def_byte = (uint8_t*)l_node_def;
 	reg_address = 0;
 
 	tx_buffer = 0;
@@ -31,7 +28,7 @@ Csc_slave::Csc_slave(A2B_Ssc_node* def, U8 local_id, U8 I2C_address, Ci2c_com* c
  *  
  *
  */
-void Csc_slave::configure_com_buffers(U8* tx_buf_p, U8* rx_buf_p, U8 size)
+void Csc_slave::configure_com_buffers(uint8_t* tx_buf_p, uint8_t* rx_buf_p, uint8_t size)
 {
 	tx_buffer = tx_buf_p;
 	rx_buffer = rx_buf_p;
@@ -49,7 +46,7 @@ void Csc_slave::configure_com_buffers(U8* tx_buf_p, U8* rx_buf_p, U8 size)
  *  if addres is tx or rx buffer  the indexes are reseted
  *
  */
-void Csc_slave::set_reg_add(U8 add)
+void Csc_slave::set_reg_add(uint8_t add)
 {
 	//read and write to this address over structure size is protected!
 	reg_address = add;
@@ -73,7 +70,7 @@ void Csc_slave::set_reg_add(U8 add)
  * if address is equal to rx buffer read data from buffer 
  *
  */
-U8 Csc_slave::read_reg(void)
+uint8_t Csc_slave::read_reg(void)
 {
 
 	if(reg_address >= sizeof(A2B_Ssc_node))
@@ -99,7 +96,7 @@ U8 Csc_slave::read_reg(void)
  *  id address is equal to tx buffer write to buffer
  *
  */
-void Csc_slave::write_reg(U8 data)
+void Csc_slave::write_reg(uint8_t data)
 {
 
 	if(reg_address >= sizeof(A2B_Ssc_node))
@@ -123,7 +120,7 @@ void Csc_slave::write_reg(U8 data)
  *	\return 0 when no error  or error code
  *
  */
-int Csc_slave::send_message(U8* data, U8 length)
+int Csc_slave::send_message(uint8_t* data, uint8_t length)
 {
 	if(!tx_buffer)
 		return A2B_NO_TX_BUF_P;
@@ -152,9 +149,9 @@ int Csc_slave::send_message(U8* data, U8 length)
  *	\return >=0 number of byte received. or error code
  *
  */
-int Csc_slave::get_message(U8* target, U8 max_len)
+int Csc_slave::get_message(uint8_t* target, uint8_t max_len)
 {
-	U8 no_bytes=0;
+	uint8_t no_bytes=0;
 
 	if(!rx_buffer)
 		return A2B_NO_RX_BUF_P;
@@ -175,7 +172,7 @@ int Csc_slave::get_message(U8* target, U8 max_len)
 }//end method
 
 
-void Csc_slave::write_to_buf(U8 data)
+void Csc_slave::write_to_buf(uint8_t data)
 {
 	if(!rx_buffer)
 		return;
@@ -186,9 +183,9 @@ void Csc_slave::write_to_buf(U8 data)
 }//end method
 
 
-U8 Csc_slave::read_from_buf( void)
+uint8_t Csc_slave::read_from_buf( void)
 {
- 	U8 data = 0;
+ 	uint8_t data = 0;
 
 	if (tx_idx < buf_size)
 		data = tx_buffer[tx_idx++];
@@ -209,7 +206,7 @@ U8 Csc_slave::read_from_buf( void)
 
 int Csc_slave::check_link(void) 
 {//NOTE: flag need to be set regularly by master
-	U8 control = l_node_def->control;
+	uint8_t control = l_node_def->control;
 
 	if(control & A2B_CTL_REG_SFM_E)
 		link_ret_ = A2B_NODE_NOT_LINKED_ERROR;
@@ -242,14 +239,14 @@ int Csc_slave::check_link(void)
 
 }//end method
 
-bool Csc_slave::check_ctl_reg_bit(U8 bit_def)
+bool Csc_slave::check_ctl_reg_bit(uint8_t bit_def)
 {
 	return (l_node_def->control & bit_def) ? true : false;
 
 }//end method
 
 
-void Csc_slave::set_status_reg_bit(U8 bit_def)
+void Csc_slave::set_status_reg_bit(uint8_t bit_def)
 {
 	l_node_def->status |= bit_def;
 
@@ -259,8 +256,8 @@ void Csc_slave::set_status_reg_bit(U8 bit_def)
 
 void Csc_slave::event_handler()
 {
-	U8 source;
-	U8 int_type;
+	uint8_t source;
+	uint8_t int_type;
 
 
 	source = irq_event(&int_type);
