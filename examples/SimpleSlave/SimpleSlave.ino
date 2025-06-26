@@ -5,11 +5,13 @@
   Used library: https://github.com/xn--nding-jua/StageConnect
 */
 
+#define USED_MICROCONTROLLER 1 // 0: MKR Vidor 4000 (SAMD21), 1: RPi Pico or ESP
+
 // includes for Arduino-Framework
-#include "Ticker.h"
 #include <stdarg.h>
 
 // includes for libraries
+#include <Ticker.h>
 #include <StageConnect.h>
 #include <ci2c_com.h>
 
@@ -32,6 +34,9 @@ void ticker100msFcn() {
   secondCounter--;
   if (secondCounter == 0) {
     secondCounter = 10;
+
+    // toggle LED each second
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
 
     if (newDiscovery > 0) {
       newDiscovery--;
@@ -68,7 +73,11 @@ void ticker100msFcn() {
     }
   }
 }
-Ticker ticker100ms(ticker100msFcn, 100, 0, MILLIS);
+#if USED_MICROCONTROLLER == 0
+  Ticker ticker100ms(ticker100msFcn, 100, 0, MILLIS); // Ticker for SAMD21
+#elif USED_MICROCONTROLLER == 1
+  Ticker ticker100ms;
+#endif
 
 void I2C_RxHandler(int numBytes) {
   uint8_t counter = 0;
@@ -105,6 +114,7 @@ void I2C_TxHandler(void)
 }
 
 void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(115200);
   delay(1000);
 
@@ -122,10 +132,17 @@ void setup() {
   Wire.onRequest(I2C_TxHandler);
 
   Serial.println("Starting timer...");
-  ticker100ms.start();
+  #if USED_MICROCONTROLLER == 0
+    ticker100ms.start();
+  #elif USED_MICROCONTROLLER == 1
+    ticker100ms.attach_ms(100, ticker100msFcn);
+  #endif
   Serial.println("System ready.");
 }
 
 void loop() {
-  ticker100ms.update();
+  #if USED_MICROCONTROLLER == 0
+    ticker100ms.update(); 
+  #elif USED_MICROCONTROLLER == 1
+  #endif
 }
