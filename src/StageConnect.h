@@ -28,6 +28,8 @@ class StageConnect {
 		
 		void update();
 		
+		uint8_t checkForNewMessage();
+
 		int getLinkStatus();
 
 	private:
@@ -38,28 +40,28 @@ class StageConnect {
 		std::unique_ptr<Csc_master> _master;
 		std::unique_ptr<Csc_slave> _slave;
 		A2B_Ssc_node _nodeConfig = {
-		  1, // API-Version
-		  0, // Brand: 0x00 = Behringer
-		  {0x02, 0x00}, // Product-ID: 0x0002 = product_id[1] bit 7 is 1 for SC module (0x0002 = P24 HUB)
-		  16, // slave only, audio slots coming from A-side consumed by the node
-		  0, // slave only,audio slots coming from B-side consumed by the node
-		  0, // audio slots going to B-side provided by the node, max downslots on master
-		  16,// audio slots going to A-side provided by the node, max upslots on master
-		  AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM16,
-		  false, // slave only, loopback for debugging
-		  false, // slave only, broadcast-mode. the nodes receives audio from ch1 to ch_n
-		  0, // slave only. gives the node power in W x 10. e.g. 125 = 12.5W
-		  0, // Status: 0x0C read for info on slave node.  see note below 
-		  0, // Control: 0x0D write to control slave node.  see note below 
-		  0, // ResetKey: must be '~' in order to apply reset
-		  255,// BufferSize. slave only, tx and rx buffer size in  bytes  max. 2^16!!
-		  0, // slave only, how many bytes were received
-		  0, // Dummy0
-		  0, // slave only, pointer to rx buffer
-		  0, // slave only, how many bytes are to be transmitted
-		  0, // Dummy1
-		  0, // slave only, pointer to tx buffer
-		  {0,0} // SG NOTE: keep the length align 4
+		  1,  // 0x00 - API-Version
+		  0,  // 0x01 - Brand: 0x00 = Behringer
+		  {0x02, 0x00}, // 0x02..0x03 - Product-ID: 0x0002 = product_id[1] bit 7 is 1 for SC module (0x0002 = P24 HUB)
+		  16, // 0x04 - slave only, audio slots coming from A-side consumed by the node
+		  0,  // 0x05 - slave only,audio slots coming from B-side consumed by the node
+		  0,  // 0x06 - audio slots going to B-side provided by the node, max downslots on master
+		  16, // 0x07 - audio slots going to A-side provided by the node, max upslots on master
+		  AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM16, // 0x08
+		  false, // 0x09 - slave only, loopback for debugging
+		  false, // 0x0A - slave only, broadcast-mode. the nodes receives audio from ch1 to ch_n
+		  0, // 0x0B - slave only. gives the node power in W x 10. e.g. 125 = 12.5W
+		  0, // 0x0C - Status: 0x0C read for info on slave node.  see note below 
+		  0, // 0x0D - Control: 0x0D write to control slave node.  see note below 
+		  0, // 0x0E - ResetKey: must be '~' in order to apply reset
+		  0, // 0x0F - BufferSize. slave only, tx and rx buffer size in  bytes  max. 2^16!!
+		  0, // 0x10 - slave only, how many bytes were received
+		  0, // 0x11 - Dummy0
+		  0, // 0x12 - slave only, pointer to rx buffer
+		  0, // 0x13 - slave only, how many bytes are to be transmitted
+		  0, // 0x14 - Dummy1
+		  0, // 0x15 - slave only, pointer to tx buffer
+		  {0,0} // 0x16 - SG NOTE: keep the length align 4
 		};
 };
 

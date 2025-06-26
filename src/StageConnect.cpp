@@ -33,6 +33,10 @@ String StageConnect::getChipInfo() {
 	}
 }
 
+uint8_t StageConnect::checkForNewMessage() {
+	return _nodeConfig.rx_buf_no_bytes;
+}
+
 // update-function to be called at least every 100ms
 void StageConnect::update() {
 	if (_isMaster) {
