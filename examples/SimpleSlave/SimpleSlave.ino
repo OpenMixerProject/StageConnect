@@ -177,6 +177,8 @@ void setup() {
 
   Serial.println("Initializing I2C as Slave...");
   stageConnect.config(0x00, 0x0003, 16, 16, AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM16, SC_MESSAGE_BUFFER); // configure as Behringer P24 with 16 input channels and 16 output channels
+  //stageConnect.config(0x00, 0x0080, 0, 32, AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM16, SC_MESSAGE_BUFFER); // configure as Unknown Device with 0 input channels and 32 output channels
+  //stageConnect.config(0x00, 0x0080, 32, 0, AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM16, SC_MESSAGE_BUFFER); // configure as Unknown Device with 32 input channels and 0 output channels
   stageConnect.slave()->configure_com_buffers(scTxBuf, scRxbuf, SC_MESSAGE_BUFFER);
   stageConnect.slave()->set_status_reg_bit(A2B_STAT_REG_RDIS);
   Wire.begin(0x3D); // I2C-Address to be detected by Behringer WING
