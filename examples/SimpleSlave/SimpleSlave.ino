@@ -3,7 +3,7 @@
   Destination: Raspberry Pi Pico
   A2B-Master: Behringer WING
 
-  Used library: https://github.com/xn--nding-jua/StageConnect
+  Used library: https://github.com/OpenMixerProject/StageConnect
 
   Written by Chris Noeding
   Licensed under GPL license
@@ -170,17 +170,21 @@ void setup() {
   Serial.println("StageConnect Demo system");
   delay(1000);
 
-  Serial.println("Try to detect A2B-Chip...");
-  Wire.begin(); // init I2C as master temporarily
-  Serial.println("Detected A2B-Chip: " + stageConnect.getChipInfo());
-  Wire.end();
+  //Serial.println("Try to detect A2B-Chip...");
+  //Wire.setSDA(4);
+  //Wire.setSCL(5);
+  //Wire.begin(); // init I2C as master temporarily
+  //Serial.println("Detected A2B-Chip: " + stageConnect.getChipInfo());
+  //Wire.end();
 
-  Serial.println("Initializing I2C as Slave...");
+  Serial.println("Initializing I2C as subordinated device...");
   stageConnect.config(0x00, 0x0003, 16, 16, AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM16, SC_MESSAGE_BUFFER); // configure as Behringer P24 with 16 input channels and 16 output channels
   //stageConnect.config(0x00, 0x0080, 0, 32, AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM16, SC_MESSAGE_BUFFER); // configure as Unknown Device with 0 input channels and 32 output channels
   //stageConnect.config(0x00, 0x0080, 32, 0, AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM16, SC_MESSAGE_BUFFER); // configure as Unknown Device with 32 input channels and 0 output channels
   stageConnect.slave()->configure_com_buffers(scTxBuf, scRxbuf, SC_MESSAGE_BUFFER);
   stageConnect.slave()->set_status_reg_bit(A2B_STAT_REG_RDIS);
+  Wire.setSDA(4);
+  Wire.setSCL(5);
   Wire.begin(0x3D); // I2C-Address to be detected by Behringer WING
   Wire.onReceive(I2C_RxHandler);
   Wire.onRequest(I2C_TxHandler);

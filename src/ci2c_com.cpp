@@ -1,3 +1,12 @@
+/*
+  StageConnect Library
+  https://github.com/OpenMixerProject/StageConnect
+
+  Licensed under GPL license
+  
+  Wrapper-Class to connect Arduinos Wire-Library with A2B-Library
+*/
+
 #include "ci2c_com.h"
 
 Ci2c_com::Ci2c_com()

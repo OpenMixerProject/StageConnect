@@ -7,11 +7,34 @@ A StageConnect/A2B main-device uses a virtual I2C-connection through the A2B-lin
 
 ## Usage
 
-TBD
+Include the main-library as well as the I2C-Wrapper-Class, instantiate both classes and setup the Wire-library:
+
+    #include <StageConnect.h>
+    #include <ci2c_com.h>
+
+    Ci2c_com i2c_com;
+    StageConnect stageConnect(false, 1, 0xD0, &i2c_com);
+
+    void I2C_RxHandler(int numBytes) {...}
+	void I2C_TxHandler(void) {...}
+	
+	void setup() {
+	    Wire.begin(0x3D);
+		Wire.onReceive(I2C_RxHandler);
+		Wire.onRequest(I2C_TxHandler);
+	}
+
+stageConnect.update() should be then called every 100ms.
+
+Have a look into the example-sketch to learn how to use the callbacks and the mailbox-system to receive channel-names from the host-device.
 
 ## Technical information
 
-TBD
+Analog Devices suggests cable-length of up to 15 meters, while Behringer allows longer cables. The filter-network of the AD242x-chips is quite tricky and needs caution on adjusting the hardware-parameters. Use the schematics of the AD2428MINI as a reference.
+
+Read the files in the folder "Documentation" for more information about the configuration-options and technical details regarding the brand- and product-ID as well as the specific commands for the mailbox-system.
+
+Please use brand-IDs above 0x80 to prevent interference with other products.
 
 ## Credits
 

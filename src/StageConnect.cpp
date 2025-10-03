@@ -1,3 +1,12 @@
+/*
+  StageConnect Library
+  https://github.com/OpenMixerProject/StageConnect
+
+  Licensed under GPL license
+  
+  Arduino-Library to create A2B hosts or subordinated devices
+*/
+
 #include "StageConnect.h"
 
 // Constructor

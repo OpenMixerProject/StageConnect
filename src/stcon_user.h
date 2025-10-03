@@ -1,3 +1,12 @@
+/*
+  StageConnect Library
+  https://github.com/OpenMixerProject/StageConnect
+
+  Licensed under GPL license
+  
+  This file allows rerouting of A2B-functions to user-functions for specific hardware
+*/
+
 #pragma once
 
 #include <stdio.h>

@@ -1,3 +1,12 @@
+/*
+  StageConnect Library
+  https://github.com/OpenMixerProject/StageConnect
+
+  Licensed under GPL license
+  
+  StageConnect Library: StageConnect host-device
+*/
+
 #include <string.h>
 #include "a2b_bus.h"
 #include "AD2425_inc.h"
