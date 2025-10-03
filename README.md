@@ -29,7 +29,7 @@ stageConnect.update() should be then called every 100ms.
 Have a look into the example-sketch to learn how to use the callbacks and the mailbox-system to receive channel-names from the host-device.
 
 For electrical connection have a look at the following picture showing the connection with the AD2428MINI evaluation board:
-![alt text](Documentation/connectiong.jpg)
+![alt text](Documentation/connection.jpg)
 
 ## Technical information
 
