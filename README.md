@@ -28,6 +28,9 @@ stageConnect.update() should be then called every 100ms.
 
 Have a look into the example-sketch to learn how to use the callbacks and the mailbox-system to receive channel-names from the host-device.
 
+For electrical connection have a look at the following picture showing the connection with the AD2428MINI evaluation board:
+![alt text](Documentation/connectiong.jpg)
+
 ## Technical information
 
 Analog Devices suggests cable-length of up to 15 meters, while Behringer allows longer cables. The filter-network of the AD242x-chips is quite tricky and needs caution on adjusting the hardware-parameters. Use the schematics of the AD2428MINI as a reference.
