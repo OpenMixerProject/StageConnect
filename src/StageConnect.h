@@ -34,6 +34,7 @@ class StageConnect {
 
 	private:
 		bool _isMaster;
+		bool _masterInitialized = false;
 		int8_t _link_status = A2B_NODE_NOT_LINKED_ERROR;
 
 		std::unique_ptr<Ca2b_bus_242x> _bus;

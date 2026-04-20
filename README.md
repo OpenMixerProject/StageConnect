@@ -7,6 +7,13 @@ A StageConnect/A2B main-device uses a virtual I2C-connection through the A2B-lin
 
 ## Usage
 
+The library supports both roles on the A2B link:
+
+- **Subordinate node** (`isMaster = false`): the Arduino is an I2C slave of the AD242x. The A2B main-device (e.g. a Behringer WING) discovers it over the A2B link and reads/writes the StageConnect register map through the AD242x.
+- **Main / controlling device** (`isMaster = true`): the Arduino is the I2C master of the AD242x. The chip is configured as A2B master and runs the discovery round for any subordinated devices connected via XLR/CAT cable.
+
+### Subordinate node
+
 Include the main-library as well as the I2C-Wrapper-Class, instantiate both classes and setup the Wire-library:
 
     #include <StageConnect.h>
@@ -17,16 +24,34 @@ Include the main-library as well as the I2C-Wrapper-Class, instantiate both clas
 
     void I2C_RxHandler(int numBytes) {...}
 	void I2C_TxHandler(void) {...}
-	
+
 	void setup() {
 	    Wire.begin(0x3D);
 		Wire.onReceive(I2C_RxHandler);
 		Wire.onRequest(I2C_TxHandler);
 	}
 
-stageConnect.update() should be then called every 100ms.
+`stageConnect.update()` should be then called every 100ms.
 
-Have a look into the example-sketch to learn how to use the callbacks and the mailbox-system to receive channel-names from the host-device.
+See `examples/SimpleSlave` to learn how to use the callbacks and the mailbox-system to receive channel-names from the host-device.
+
+### Main / controlling device
+
+    #include <StageConnect.h>
+    #include <ci2c_com.h>
+
+    Ci2c_com i2c_com;
+    StageConnect stageConnect(true, 1, 0x68, &i2c_com); // isMaster = true
+
+    void setup() {
+        Wire.begin();                // Arduino acts as I2C master
+        stageConnect.config(0x80, 0x0001, 16, 16,
+                            AD242X_I2SGCFG_EARLY | AD242X_I2SGCFG_TDM16, 32);
+    }
+
+Call `stageConnect.update()` every 100ms. Internally it runs the A2B discovery round and keeps the chain alive. Use `stageConnect.master()` to access the `Csc_master` interface for sending/receiving messages, querying the number of discovered nodes, reading channel allocations, etc.
+
+See `examples/SimpleMaster` for a complete sketch.
 
 For electrical connection have a look at the following picture showing the connection with the AD2428MINI evaluation board:
 ![alt text](Documentation/connection.jpg)
